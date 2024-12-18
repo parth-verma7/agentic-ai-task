@@ -57,10 +57,10 @@ groupchat = autogen.GroupChat(agents=[assistant1, assistant2, user_proxy], messa
 manager = autogen.GroupChatManager(groupchat=groupchat, llm_config={"config_list": config_list_gemini, "seed": seed})
 
 user_query = f'''
-    Conduct an in-depth exploratory data analysis (EDA) on this input dataset - {df}. Analyze patterns, trends, and statistical significance in the data, 
-    including aspects like class imbalances, dataset format, and the number of turns in a conversation.
-    Generate relevant graphs and charts to visually represent data patterns. Create clear visualizations of key findings and anomalies, 
-    providing comprehensive analysis reports with key insights and visual representations such as graphs and charts
+    Perform an in-depth exploratory data analysis (EDA) on the input dataset - {df}. 
+    Examine patterns, trends, and statistical significance, including class imbalances, dataset format, and the number of conversation turns. 
+    Generate graphs and charts to visually represent data patterns, highlight key findings, and detect anomalies. 
+    Provide a detailed analysis report with insights and visualizations.
 '''
 
 user_proxy.send(
