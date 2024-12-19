@@ -4,12 +4,15 @@ import pandas as pd
 from autogen.code_utils import content_str
 from autogen import AssistantAgent, UserProxyAgent
 from dotenv import load_dotenv
-load_dotenv()
 
+load_dotenv()
 gemini_api_key=os.getenv('GEMINI_API_KEY')
+
+## INPUT YOUR HUGGING FACE DATASET LINK HERE
 df = pd.read_csv("hf://datasets/TrainingDataPro/email-spam-classification/email_spam.csv")
 df.to_csv("charts/emails.csv", index=False)
 
+## CONFIGURE YOUR GEMINI MODEL THAT YOU PREFER TO USE
 config_list_gemini = [
     {
         "model": "gemini-1.5-flash",
@@ -20,6 +23,7 @@ config_list_gemini = [
 
 seed = 25
 
+## CREATE MULTIPLE ASSISTANTS TO AUTOMATE THE OPERATIONS
 assistant1 = AssistantAgent(
     name="assistant1",
     system_message='''Provide the (i)th instruction for the data analysis task and pass control to assistant2. 
@@ -55,9 +59,11 @@ user_proxy = UserProxyAgent(
     description="Responsible for data analysis of the dataset provided."
 )
 
+## CREATING A GROUP CHAT THAT AUTOMATICALLY DETERMINES WHICH AGENT SHOULD ACT
 groupchat = autogen.GroupChat(agents=[assistant1, assistant2, user_proxy], messages=[], max_round=20, speaker_selection_method="round_robin")
 manager = autogen.GroupChatManager(groupchat=groupchat, llm_config={"config_list": config_list_gemini, "seed": seed})
 
+## MAIN TASK DEFINING QUERY FOR AGENTS 
 user_query = f'''
     Perform an in-depth exploratory data analysis (EDA) on the input dataset. \n 
     Examine patterns, trends, and statistical significance, including class imbalances, dataset format, and the number of conversation turns. \n
@@ -71,12 +77,13 @@ user_proxy.send(
     request_reply=True
 )
 
-responses = groupchat.messages
+responses = groupchat.messages  ## it will store all the conversational messages in the groupchat
 responses[0]['content'] = user_query 
 
-all_files = os.listdir("./charts")
+all_files = os.listdir("./charts")  ## it defines the directory where all saved charts will be stored
 charts = [file for file in all_files if file.endswith(".png") or file.endswith(".jpg")]
 
+## FUNCTION TO GENERATE THE FINAL REPORT
 def generate_report(response, output_file):
     with open(output_file, "w") as f:
         f.write("# Exploratory Data Analysis Report\n\n")
