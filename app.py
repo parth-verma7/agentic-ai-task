@@ -31,7 +31,7 @@ assistant1 = AssistantAgent(
         "config_list": config_list_gemini,
         "seed": seed
     },
-    max_consecutive_auto_reply=2
+    max_consecutive_auto_reply=5
 )
 
 assistant2 = AssistantAgent(
@@ -42,7 +42,7 @@ assistant2 = AssistantAgent(
         "config_list": config_list_gemini,
         "seed": seed
     },
-    max_consecutive_auto_reply=2
+    max_consecutive_auto_reply=5
 )
 
 user_proxy = UserProxyAgent(
@@ -59,20 +59,54 @@ groupchat = autogen.GroupChat(agents=[assistant1, assistant2, user_proxy], messa
 manager = autogen.GroupChatManager(groupchat=groupchat, llm_config={"config_list": config_list_gemini, "seed": seed})
 
 user_query = f'''
-    Perform an in-depth exploratory data analysis (EDA) on the input dataset - {df}. 
-    Examine patterns, trends, and statistical significance, including class imbalances, dataset format, and the number of conversation turns. 
-    Generate graphs and charts to visually represent data patterns, highlight key findings, and detect anomalies. 
-    Provide a detailed analysis report with insights and visualizations.
+    Perform an in-depth exploratory data analysis (EDA) on the input dataset. \n 
+    Examine patterns, trends, and statistical significance, including class imbalances, dataset format, and the number of conversation turns. \n
+    Generate graphs and charts to visually represent data patterns, highlight key findings, and detect anomalies. \n
+    Provide a detailed analysis report with insights and visualizations. \n
 '''
 
 user_proxy.send(
-    user_query, 
+    f"Input Dataset {df} . -> " + user_query, 
     recipient=manager, 
     request_reply=True
 )
 
-response = groupchat.messages
+responses = groupchat.messages
+responses[0]['content'] = user_query 
 
-import pickle
-with open('response.pkl', 'wb') as f:
-    pickle.dump(response, f)
+all_files = os.listdir("./charts")
+charts = [file for file in all_files if file.endswith(".png") or file.endswith(".jpg")]
+
+def generate_report(response, output_file):
+    with open(output_file, "w") as f:
+        f.write("# Exploratory Data Analysis Report\n\n")
+        for response in responses:
+            name = response['name']
+            content = response['content']
+            content=content.replace("exitcode: 0 (execution succeeded)", " ")
+            if name == "user_proxy":
+                f.write("## User Proxy\n")
+                f.write(content + "\n\n")
+
+            elif name == "assistant1":
+                f.write("## Assistant 1\n")
+                f.write(content+"\n")
+                if ".jpg" in content or ".png" in content:
+                    for chart in charts:
+                        if chart in content:
+                            f.write(f"![{chart}](./charts/{chart})\n")
+                f.write("\n\n")
+
+            elif name == "assistant2":
+                f.write("## Assistant 2\n")
+                f.write(content+"\n")
+                if ".jpg" in content or ".png" in content:
+                    for chart in charts:
+                        if chart in content:
+                            f.write(f"![{chart}](./charts/{chart})\n")
+                f.write("\n\n")
+
+    print(f"Report saved to {output_file}")
+
+
+generate_report(responses, "EDA.md")
