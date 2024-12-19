@@ -116,4 +116,4 @@ def generate_report(response, output_file):
     print(f"Report saved to {output_file}")
 
 
-generate_report(responses, "EDA.md")
+generate_report(responses, "README.md")
