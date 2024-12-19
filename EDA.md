@@ -2,23 +2,14 @@
 
 ## User Proxy
 
-    Perform an in-depth exploratory data analysis (EDA) on the input dataset -                                                 title                                               text      type
-0                           ?? the secrets to SUCCESS  Hi James,\n\nHave you claim your complimentary...      spam
-1                     ?? You Earned 500 GCLoot Points  \nalt_text\nCongratulations, you just earned\n...  not spam
-2                          ?? Your GitHub launch code  Here's your GitHub launch code, @Mortyj420!\n ...  not spam
-3   [The Virtual Reward Center] Re: ** Clarifications  Hello,\n \nThank you for contacting the Virtua...  not spam
-4   10-1 MLB Expert Inside, Plus Everything You Ne...  Hey Prachanda Rawal,\n\nToday's newsletter is ...      spam
-..                                                ...                                                ...       ...
-79  Your application for the position of  Child Pr...  Dear Maryam, \n\n \n\nI would like to thank yo...  not spam
-80     Your Kilimall Account is Ready - Shopping Now!  Dear Customer,\n\nWelcome to Kilimall, Thanks ...  not spam
-81  Your Steam account: Access from new web or mob...  Dear vladis163rus,\nHere is the Steam Guard co...  not spam
-82                 Your uploaded document is rejected  View In Browser | Log in\n \n \n\nSkrill logo\...  not spam
-83   You've Earned a Reward from Bard Explorers India  You've received a gift!\nSign in to your Bard ...  not spam
-
-[84 rows x 3 columns]. 
+    Perform an in-depth exploratory data analysis (EDA) on the input dataset. 
+ 
     Examine patterns, trends, and statistical significance, including class imbalances, dataset format, and the number of conversation turns. 
+
     Generate graphs and charts to visually represent data patterns, highlight key findings, and detect anomalies. 
-    Provide a detailed analysis report with insights and visualizations.
+
+    Provide a detailed analysis report with insights and visualizations. 
+
 
 
 ## Assistant 1
