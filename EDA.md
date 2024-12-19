@@ -77,7 +77,7 @@ The cleaned dataset `df` (including the added `title_length` and `text_length` c
 
 
 ## User Proxy
-exitcode: 0 (execution succeeded)
+ 
 Code output: 
 Cleaned dataset (first 5 rows):
                               title  ... text_length
@@ -164,7 +164,7 @@ The descriptive statistics table (`descriptive_stats`) and the path to the gener
 
 
 ## User Proxy
-exitcode: 0 (execution succeeded)
+ 
 Code output: 
 Descriptive Statistics:
           title_length                  text_length                  
