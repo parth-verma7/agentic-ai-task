@@ -1,7 +1,6 @@
 import os
 import autogen
 import pandas as pd
-import google.generativeai as genai
 from autogen.code_utils import content_str
 from autogen import AssistantAgent, UserProxyAgent
 from dotenv import load_dotenv
@@ -9,7 +8,7 @@ load_dotenv()
 
 gemini_api_key=os.getenv('GEMINI_API_KEY')
 df = pd.read_csv("hf://datasets/TrainingDataPro/email-spam-classification/email_spam.csv")
-df.to_csv("emails.csv", index=False)
+df.to_csv("charts/emails.csv", index=False)
 
 config_list_gemini = [
     {
@@ -23,13 +22,16 @@ seed = 25
 
 assistant1 = AssistantAgent(
     name="assistant1",
-    system_message='''Provide the (i)th instruction for the data analysis task and pass control to assistant2. Ensure the instruction is clear, sequential, and builds on any prior inferences made by assistant2. Wait for assistant2 to generate and execute the corresponding code before crafting the next (i+1)th instruction based on the insights and outputs provided.''',
+    system_message='''Provide the (i)th instruction for the data analysis task and pass control to assistant2. 
+                        Ensure the instruction is clear, sequential, and builds on any prior inferences made by assistant2.
+                            Wait for assistant2 to generate and execute the corresponding code before crafting the next (i+1)th instruction based on the insights and outputs provided.
+                                If assistant2 falls into some error ask it to fix that error by generating the previous code again.''',
     description='''I generate step-by-step instructions for data analysis tasks, ensuring each instruction logically progresses toward the analysis goal. I collaborate with assistant2 for seamless task execution.''',
     llm_config={
         "config_list": config_list_gemini,
         "seed": seed
     },
-    max_consecutive_auto_reply=10
+    max_consecutive_auto_reply=2
 )
 
 assistant2 = AssistantAgent(
@@ -40,12 +42,12 @@ assistant2 = AssistantAgent(
         "config_list": config_list_gemini,
         "seed": seed
     },
-    max_consecutive_auto_reply=10
+    max_consecutive_auto_reply=2
 )
 
 user_proxy = UserProxyAgent(
     "user_proxy",
-    code_execution_config={"work_dir": ".", "use_docker": False},
+    code_execution_config={"work_dir": "charts", "use_docker": False},
     human_input_mode="NEVER",
     max_consecutive_auto_reply=10,
     is_termination_msg=lambda x: content_str(x.get("content")).find("TERMINATE") >= 0
@@ -53,7 +55,7 @@ user_proxy = UserProxyAgent(
     description="Responsible for data analysis of the dataset provided."
 )
 
-groupchat = autogen.GroupChat(agents=[assistant1, assistant2, user_proxy], messages=[], max_round=50, speaker_selection_method="round_robin")
+groupchat = autogen.GroupChat(agents=[assistant1, assistant2, user_proxy], messages=[], max_round=20, speaker_selection_method="round_robin")
 manager = autogen.GroupChatManager(groupchat=groupchat, llm_config={"config_list": config_list_gemini, "seed": seed})
 
 user_query = f'''
@@ -68,3 +70,9 @@ user_proxy.send(
     recipient=manager, 
     request_reply=True
 )
+
+response = groupchat.messages
+
+import pickle
+with open('response.pkl', 'wb') as f:
+    pickle.dump(response, f)
