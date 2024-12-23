@@ -1,5 +1,7 @@
 # Exploratory Data Analysis Report
 
+** Note this is an example report of how my Data Analysis Agent did EDA of any specific provided Hugging Face Dataset **
+
 ## User Proxy
 
     Perform an in-depth exploratory data analysis (EDA) on the input dataset. 
