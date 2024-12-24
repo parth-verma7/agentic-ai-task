@@ -79,22 +79,6 @@ The cleaned dataset `df` (including the added `title_length` and `text_length` c
 ![spam_distribution.png](./charts/spam_distribution.png)
 
 
-## User Proxy
- 
-Code output: 
-Cleaned dataset (first 5 rows):
-                              title  ... text_length
-0        ?? the secrets to success  ...          47
-1  ?? you earned 500 gcloot points  ...          44
-2       ?? your github launch code  ...          47
-3            re: ** clarifications  ...          47
-4           10-1 mlb expert inside  ...          47
-
-[5 rows x 5 columns]
-
-Bar chart saved to: spam_distribution.png
-
-
 ## Assistant 1
 Instruction 2:  Analyze the text length distributions ('title_length' and 'text_length') for both spam and not spam emails. Generate separate histograms for 'title_length' and 'text_length', with each histogram showing separate distributions for spam and not spam.  Calculate and report the descriptive statistics (mean, median, standard deviation) for 'title_length' and 'text_length' for both spam and not spam categories.  This will help identify potential differences in text length characteristics between the two classes.  Pass the histograms and descriptive statistics to assistant2.
 
