@@ -1,6 +1,7 @@
-# Exploratory Data Analysis Report
+# Exploratory Data Analysis Report AGI
 
-** Note this is an example report of how my Data Analysis Agent did EDA of any specific provided Hugging Face Dataset **
+**Remember**  
+This is an example report demonstrating how my **Data Analysis Agent** performed **Exploratory Data Analysis (EDA)** on a specific Hugging Face dataset link **AUTONOMOUSLY**, showcasing its capabilities as an **AGI-like system**.
 
 ## User Proxy
 
